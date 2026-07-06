@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#120d16" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="./assets/generated/app-icon-180.png" />
+    <title>마왕성 디펜스</title>
+    <script type="module" crossorigin src="./assets/index-Dv7bY22w.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DcaYwQgU.css">
+  </head>
+  <body>
+    <main id="app">
+      <canvas id="game" width="1280" height="720" aria-label="마왕성 디펜스 게임 화면"></canvas>
+      <section id="prologue" class="prologue">
+        <div class="prologue-art" aria-hidden="true">
+          <span class="prologue-mist mist-a"></span>
+          <span class="prologue-mist mist-b"></span>
+          <span class="prologue-embers"></span>
+          <span class="prologue-rift"></span>
+        </div>
+        <div class="prologue-copy">
+          <span class="prologue-sigil" aria-hidden="true"></span>
+          <span class="chapter">마왕성 최후의 밤</span>
+          <h1>침공이 시작된다</h1>
+          <p>
+            인간 왕국의 열여섯 영웅이 새벽을 기다리지 않고 성문 앞으로 진군했다.
+            무너진 회랑 아래, 남은 것은 마기와 영혼, 그리고 마지막 명령뿐이다.
+          </p>
+          <div class="prologue-objectives">
+            <span>마왕성 사수</span>
+            <span>영혼 수확</span>
+            <span>인간 성채 함락</span>
+          </div>
+          <div class="prologue-menu">
+            <button id="prologueStart" class="prologue-start" type="button">
+              <span class="start-emblem" aria-hidden="true">
+                <svg viewBox="0 0 48 48">
+                  <path d="M10 39h28V20l-4 3-4-10-6 10-6-10-4 10-4-3z" fill="currentColor"/>
+                  <path d="M24 6v20M16 14h16" stroke="#fff0b6" stroke-width="4" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span class="start-copy">
+                <strong>침공을 맞이한다</strong>
+                <small>전장으로 진입</small>
+              </span>
+            </button>
+            <button id="historyOpen" class="history-open" type="button">
+              <span aria-hidden="true">
+                <svg viewBox="0 0 32 32">
+                  <path d="M8 6h16v20H8z" fill="currentColor"/>
+                  <path d="M12 11h8M12 16h8M12 21h5" stroke="#1b1119" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M6 9h4M6 15h4M6 21h4" stroke="#ffcf6c" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <strong>내 기록 보기</strong>
+            </button>
+            <button id="installOpen" class="install-open" type="button">
+              <span aria-hidden="true">
+                <svg viewBox="0 0 32 32">
+                  <path d="M8 12h16v14H8z" fill="currentColor"/>
+                  <path d="M11 12V9c0-3 2-5 5-5s5 2 5 5v3" fill="none" stroke="#ffcf6c" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M16 14v7m-3-3l3 3 3-3" fill="none" stroke="#1b1119" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span>
+                <strong>홈 화면 추가</strong>
+                <small>전체화면으로 플레이</small>
+              </span>
+            </button>
+          </div>
+        </div>
+      </section>
+      <section id="hud" class="hud hidden">
+        <div class="topbar">
+          <div class="brand">
+            <strong>마왕성 디펜스</strong>
+            <span id="status">침공 준비 중</span>
+          </div>
+          <div class="stats">
+            <span id="wave">Wave 1</span>
+            <span id="souls">0 영혼</span>
+            <span id="mana">0 마기</span>
+            <span id="combo">Combo 0</span>
+          </div>
+        </div>
+        <div class="command">
+          <div id="cards" class="cards"></div>
+          <div class="actions">
+            <button id="spellMeteor" type="button">운석</button>
+            <button id="spellFear" type="button">공포</button>
+            <button id="upgrade" type="button">성채 강화</button>
+            <button id="pause" type="button">일시정지</button>
+          </div>
+        </div>
+        <aside id="storyToast" class="story-toast hidden"></aside>
+      </section>
+      <section id="reward" class="modal reward hidden" aria-live="polite">
+        <div class="modal-panel">
+          <span class="modal-kicker">전투 보상</span>
+          <h2>어둠의 조율</h2>
+          <p id="rewardSummary">다음 침공을 버틸 힘을 선택하세요.</p>
+          <div id="rewardChoices" class="reward-choices"></div>
+        </div>
+      </section>
+      <section id="result" class="modal result hidden" aria-live="polite">
+        <div class="modal-panel">
+          <div class="result-head">
+            <div id="resultArt" class="result-art" aria-hidden="true"></div>
+            <div>
+              <span id="resultKicker" class="modal-kicker">전투 종료</span>
+              <h2 id="resultTitle">마왕성 함락</h2>
+              <p id="resultSummary">성문은 무너졌지만, 밤은 다시 찾아옵니다.</p>
+            </div>
+          </div>
+          <div id="resultStats" class="result-stats"></div>
+          <div class="result-actions">
+            <button id="retry" type="button">다시 방어한다</button>
+            <button id="toTitle" type="button">타이틀로</button>
+          </div>
+        </div>
+      </section>
+      <section id="history" class="modal history hidden" aria-live="polite">
+        <div class="modal-panel">
+          <div class="history-head">
+            <div class="history-art" aria-hidden="true">
+              <svg viewBox="0 0 80 80">
+                <path d="M18 14h44v52H18z" fill="currentColor"/>
+                <path d="M28 27h25M28 39h25M28 51h16" stroke="#1b1119" stroke-width="5" stroke-linecap="round"/>
+                <path d="M13 22h10M13 39h10M13 56h10" stroke="#ffcf6c" stroke-width="4" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <span class="modal-kicker">마왕성 기록실</span>
+              <h2>내 전투 기록</h2>
+              <p id="historySummary">아직 기록된 전투가 없습니다.</p>
+            </div>
+          </div>
+          <div id="historyBest" class="history-best"></div>
+          <div id="historyList" class="history-list"></div>
+          <div class="result-actions">
+            <button id="historyClose" type="button">닫기</button>
+          </div>
+        </div>
+      </section>
+      <section id="installGuide" class="modal install-guide hidden" aria-live="polite">
+        <div class="modal-panel">
+          <div class="install-head">
+            <div class="install-art" aria-hidden="true">
+              <svg viewBox="0 0 80 80">
+                <path d="M18 30h44v36H18z" fill="currentColor"/>
+                <path d="M26 30v-7c0-9 6-15 14-15s14 6 14 15v7" fill="none" stroke="#ffcf6c" stroke-width="7" stroke-linecap="round"/>
+                <path d="M40 36v18m-8-8l8 8 8-8" fill="none" stroke="#1b1119" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <span class="modal-kicker">전체화면 전장</span>
+              <h2>홈 화면에 추가</h2>
+              <p id="installSummary">주소창 없이 넓은 가로 화면에서 마왕성을 지킬 수 있습니다.</p>
+            </div>
+          </div>
+          <div id="installSteps" class="install-steps"></div>
+          <div class="result-actions">
+            <button id="installConfirm" type="button">설치하기</button>
+            <button id="installClose" type="button">닫기</button>
+          </div>
+        </div>
+      </section>
+      <button id="start" class="start hidden" type="button">
+        <span>침공을 맞이한다</span>
+        <small>가로모드에서 카드로 마왕군 소환</small>
+      </button>
+      <aside class="rotate" aria-hidden="true">
+        <strong>가로모드 권장</strong>
+        <span>화면을 돌리면 전장이 넓게 보입니다</span>
+      </aside>
+    </main>
+  </body>
+</html>
